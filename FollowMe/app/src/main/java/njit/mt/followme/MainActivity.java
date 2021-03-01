@@ -272,7 +272,8 @@ public class MainActivity extends AppCompatActivity {
                     //using null value for a canceled prompt, otherwise will be a string
                     if(x != null) {
                         Log.v(TAG, x.toString());
-                        saveScore(x.toString(), score);
+                        final int nScore = score;
+                        saveScore(x.toString(), nScore);
                     }
                     newGame();
                 });
