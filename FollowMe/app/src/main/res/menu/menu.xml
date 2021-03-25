@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+    <item android:id="@+id/game"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_play_arrow_24"
+        android:title="Play" />
+    <item android:id="@+id/scores"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_table_view_24"
+        android:title="Scores"/>
+</menu>
