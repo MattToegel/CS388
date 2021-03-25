@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         grid = findViewById(R.id.grid);
         scoreText = findViewById(R.id.scoreText);
         roundText = findViewById(R.id.roundText);
+
+        roundText.getText().hashCode()
         buildGrid();
         resetButtons();
         updateUI();
