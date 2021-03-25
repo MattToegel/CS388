@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name="njit.mt.exploringactivitytemplates.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.ExploringActivityTemplates.NoActionBar"></activity>
+    </application>
+</manifest>

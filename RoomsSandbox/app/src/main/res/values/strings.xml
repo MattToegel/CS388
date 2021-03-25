@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">RoomsSandbox</string>
+    <string name="add_user">Add User</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">Data not saved because it is empty.</string>
+</resources>
