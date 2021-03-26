@@ -52,7 +52,7 @@ public class LoginDataSource {
                         int status = response.getInt("status");
                         JSONObject respError = response.getJSONObject("error");
                         if(status == 200){
-                            JSONObject userJO = response.getJSONObject("user");
+                            JSONObject userJO = response.getJSONObject("data");
                             String email = userJO.getString("email");
                             String username = userJO.has("displayName")?userJO.getString("displayName"):email;
                             String uid = userJO.getString("uid");
@@ -109,7 +109,7 @@ public class LoginDataSource {
                     // do anything with response
                     try {
                         user = new LoggedInUser(
-                                response.getJSONObject("user").getString("uid"), response.getJSONObject("user").getString("displayName"));
+                                response.getJSONObject("data").getString("uid"), response.getJSONObject("user").getString("displayName"));
                         success.accept(new Result.Success<>(user));
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -52,7 +52,7 @@ public class LoginRepository {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void login(String username, String password, Consumer<Result<LoggedInUser>> success, Consumer<Result.Error> error) {
         // handle login
-        dataSource.login(username, password,
+        /*.login(username, password,
                 (Result<LoggedInUser> result) -> {
                     setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
                     success.accept(result);
@@ -60,15 +60,15 @@ public class LoginRepository {
                 (Result.Error err) -> {
                     // error.accept(((Result.Success<LoggedInUser>) error));
                     error.accept(err);
-                });
-        /*dataSource.register(username, username.split("@")[0], password, (Result<LoggedInUser> result) -> {
+                });*/
+        dataSource.register(username, username.split("@")[0], password, (Result<LoggedInUser> result) -> {
                     setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
                     success.accept(result);
                 },
-                (Result<LoggedInUser> err) -> {
+                (Result.Error err) -> {
                     // error.accept(((Result.Success<LoggedInUser>) error));
                     error.accept(err);
-                });*/
+                });
         /*Result<LoggedInUser> result = dataSource.login(username, password);
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
