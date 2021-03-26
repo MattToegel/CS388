@@ -109,7 +109,7 @@ public class LoginDataSource {
                     // do anything with response
                     try {
                         user = new LoggedInUser(
-                                response.getJSONObject("data").getString("uid"), response.getJSONObject("user").getString("displayName"));
+                                response.getJSONObject("data").getString("uid"), response.getJSONObject("data").getString("displayName"));
                         success.accept(new Result.Success<>(user));
                     } catch (JSONException e) {
                         e.printStackTrace();
