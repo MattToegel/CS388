@@ -43,7 +43,7 @@ public class LoginDataSource {
                     // do anything with response
                     try {
                         int status = response.getInt("status");
-                        JSONObject respError = response.getJSONObject("error");
+
                         if(status == 200){
                             JSONObject userJO = response.getJSONObject("data");
                             String email = userJO.getString("email");
@@ -54,7 +54,7 @@ public class LoginDataSource {
                             success.accept(new Result.Success<>(user));
                         }
                         else{
-
+                            JSONObject respError = response.getJSONObject("error");
                             error.accept(new Result.Error(respError.getString("code"), new Exception(respError.getString("message"))));
                         }
 
@@ -98,9 +98,16 @@ public class LoginDataSource {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        user = new LoggedInUser(
-                                response.getJSONObject("data").getString("uid"), response.getJSONObject("data").getString("displayName"));
-                        success.accept(new Result.Success<>(user));
+                        int status = response.getInt("status");
+                        if(status == 200) {
+                            user = new LoggedInUser(
+                                    response.getJSONObject("data").getString("uid"), response.getJSONObject("data").getString("displayName"));
+                            success.accept(new Result.Success<>(user));
+                        }
+                        else{
+                            JSONObject respError = response.getJSONObject("error");
+                            error.accept(new Result.Error(respError.getString("code"), new Exception(respError.getString("message"))));
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                         error.accept(new Result.Error("json-error",e));
