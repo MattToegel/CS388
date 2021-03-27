@@ -29,13 +29,6 @@ public class LoginDataSource {
 
 
         try {
-            // TODO: handle loggedInUser authentication
-            /*LoggedInUser fakeUser =
-                    new LoggedInUser(
-                            java.util.UUID.randomUUID().toString(),
-                            "Jane Doe");*/
-            //return new Result.Success<>(fakeUser);
-            Log.v("bg", "Start");
             AndroidNetworking.post("https://class.whattheduck.app/api/login")
                     .addBodyParameter("email", username)
                     .addBodyParameter("password", password)
@@ -50,9 +43,9 @@ public class LoginDataSource {
                     // do anything with response
                     try {
                         int status = response.getInt("status");
-                        JSONObject respError = response.getJSONObject("error");
+
                         if(status == 200){
-                            JSONObject userJO = response.getJSONObject("user");
+                            JSONObject userJO = response.getJSONObject("data");
                             String email = userJO.getString("email");
                             String username = userJO.has("displayName")?userJO.getString("displayName"):email;
                             String uid = userJO.getString("uid");
@@ -61,13 +54,13 @@ public class LoginDataSource {
                             success.accept(new Result.Success<>(user));
                         }
                         else{
-
-                            error.accept(new Result.Error(new Exception(respError.getString("message"))));
+                            JSONObject respError = response.getJSONObject("error");
+                            error.accept(new Result.Error(respError.getString("code"), new Exception(respError.getString("message"))));
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        error.accept(new Result.Error(new Exception(e.getMessage())));
+                        error.accept(new Result.Error("json-error",new Exception(e.getMessage())));
                     }
                 }
 
@@ -80,22 +73,20 @@ public class LoginDataSource {
 
                     try {
                         JSONObject jo = new JSONObject(e.getErrorBody());
-                        error.accept(new Result.Error(new Exception(jo.getJSONObject("error").getString("message"))));
+                        error.accept(new Result.Error(jo.getJSONObject("error").getString("code"),new Exception(jo.getJSONObject("error").getString("message"))));
                     } catch (JSONException jsonException) {
                         jsonException.printStackTrace();
                     }
                 }
             }));
-            Log.v("bg", "end");
         } catch (Exception e) {
-            error.accept(new Result.Error(new IOException("Error registering", e)));
+            error.accept(new Result.Error("unknown", new IOException("Error registering", e)));
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void register(String email, String username, String password, Consumer<Result<LoggedInUser>> success, Consumer<Result.Error> error) {
         try {
-            Log.v("bg", "Start");
             AndroidNetworking.post("https://class.whattheduck.app/api/register")
                     .addBodyParameter("username", username)
                     .addBodyParameter("email", email)
@@ -106,27 +97,32 @@ public class LoginDataSource {
                     .build().getAsJSONObject((new JSONObjectRequestListener() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    // do anything with response
                     try {
-                        user = new LoggedInUser(
-                                response.getJSONObject("user").getString("uid"), response.getJSONObject("user").getString("displayName"));
-                        success.accept(new Result.Success<>(user));
+                        int status = response.getInt("status");
+                        if(status == 200) {
+                            user = new LoggedInUser(
+                                    response.getJSONObject("data").getString("uid"), response.getJSONObject("data").getString("displayName"));
+                            success.accept(new Result.Success<>(user));
+                        }
+                        else{
+                            JSONObject respError = response.getJSONObject("error");
+                            error.accept(new Result.Error(respError.getString("code"), new Exception(respError.getString("message"))));
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        error.accept(new Result.Error(new IOException("IO Exception")));
+                        error.accept(new Result.Error("json-error",e));
                     }
                 }
 
                 @Override
                 public void onError(ANError e) {
                     // handle error
-                    error.accept(new Result.Error(new IOException("IO Exception")));
+                    error.accept(new Result.Error("an-error", new Exception(e.getErrorBody())));
                 }
             }));
-            Log.v("bg", "end");
         } catch (Exception e) {
             Log.v("register", e.getMessage());
-            error.accept(new Result.Error(new IOException("Error registering", e)));
+            error.accept(new Result.Error("unknown", new IOException("Error registering", e)));
         }
     }
 

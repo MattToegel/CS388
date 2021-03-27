@@ -36,13 +36,16 @@ public class Result<T> {
     // Error sub-class
     public final static class Error extends Result {
         private Exception error;
+        private String code;
 
-        public Error(Exception error) {
-            this.error = error;
+        public Error(String code, Exception error) {
+            this.code = code; this.error = error;
         }
 
         public Exception getError() {
             return this.error;
         }
+        //added error code to fit the exceptions from firebase endpoint
+        public String getCode() {return this.code; }
     }
 }
