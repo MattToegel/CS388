@@ -1,6 +1,8 @@
 package njit.mt.whackaquack.ui.profile;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +41,11 @@ public class ProfileFragment extends Fragment {
         final TextView phoneView = root.findViewById(R.id.editTextPhone);
         profileViewModel.getPhoneNumber().observe(getViewLifecycleOwner(), s -> phoneView.setText(s));
 
+
+
         final Button btn = root.findViewById(R.id.button);
         btn.setOnClickListener((view)->{
-            profileViewModel.saveChanges();
+            profileViewModel.saveChanges(emailView.getText().toString(), usernameView.getText().toString(), phoneView.getText().toString());
         });
         return root;
     }

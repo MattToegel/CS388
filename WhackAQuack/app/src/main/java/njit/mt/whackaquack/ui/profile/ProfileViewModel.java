@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import njit.mt.whackaquack.data.LoginRepository;
-import njit.mt.whackaquack.data.Result;
 import njit.mt.whackaquack.data.model.LoggedInUser;
 
 public class ProfileViewModel extends ViewModel {
@@ -32,8 +31,8 @@ public class ProfileViewModel extends ViewModel {
 
     public LiveData<String> getEmail(){return email;}
 
-    public void saveChanges(){
-        loginRepository.updateProfile(displayName.getValue(), email.getValue(), phoneNumber.getValue(), null, (user)->{
+    public void saveChanges(String displayName, String email, String phoneNumber){
+        loginRepository.updateProfile(displayName, email, phoneNumber, null, (user)->{
             Log.v("ProfileViewModel", "saved profile");
         },(error)->{
             Log.e("ProfileViewModel", "error saving profile");

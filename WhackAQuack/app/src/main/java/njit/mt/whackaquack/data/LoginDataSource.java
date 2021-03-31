@@ -77,7 +77,7 @@ public class LoginDataSource {
                 @Override
                 public void onError(ANError e) {
                     // handle error
-
+                    Log.e("update profile", e.getMessage());
                     Log.e("update profile error", e.getErrorBody());
 
                     try {
