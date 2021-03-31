@@ -3,6 +3,8 @@ package njit.mt.whackaquack.data;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.function.Consumer;
 
@@ -21,10 +23,15 @@ public class LoginRepository {
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
     private LoggedInUser user = null;
-
+    //NOTE: not necessarily the best way to do this
+    private MutableLiveData<Boolean> isLoggedIn;
     // private constructor : singleton access
     private LoginRepository(LoginDataSource dataSource) {
         this.dataSource = dataSource;
+        if(isLoggedIn == null){
+            isLoggedIn = new MutableLiveData<>();
+        }
+        isLoggedIn.setValue(user != null);
     }
 
     public static LoginRepository getInstance(LoginDataSource dataSource) {
@@ -33,22 +40,34 @@ public class LoginRepository {
         }
         return instance;
     }
-
-    public boolean isLoggedIn() {
-        return user != null;
+    //NOTE: not necessarily the best way to do this
+    public LiveData<Boolean> isLoggedIn(){
+        if(isLoggedIn == null){
+            isLoggedIn = new MutableLiveData<>();
+        }
+        return isLoggedIn;
     }
+    /*public boolean isLoggedIn() {
+        return user != null;
+    }*/
 
     public void logout() {
         user = null;
+        isLoggedIn.setValue(false);
         dataSource.logout();
     }
-
+    public LoggedInUser getUser(){
+        return this.user;
+    }
     private void setLoggedInUser(LoggedInUser user) {
         this.user = user;
+        isLoggedIn.setValue(user != null);
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
     }
-
+    public void updateProfile(String username, String email, String phoneNumber, String password,Consumer<Result<LoggedInUser>> success, Consumer<Result.Error> error){
+        dataSource.updateProfile(this.user.getUserId(), username, email, phoneNumber, password, success, error);
+    }
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void login(String username, String password, Consumer<Result<LoggedInUser>> success, Consumer<Result.Error> error) {
         // handle login

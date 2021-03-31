@@ -17,6 +17,12 @@
         tools:layout="@layout/login_fragment" />
 
     <fragment
+        android:id="@+id/nav_profile"
+        android:name="njit.mt.whackaquack.ui.profile.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
         android:id="@+id/nav_gallery"
         android:name="njit.mt.whackaquack.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
