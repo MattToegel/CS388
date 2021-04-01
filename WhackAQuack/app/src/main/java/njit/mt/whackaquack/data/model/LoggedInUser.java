@@ -9,6 +9,7 @@ public class LoggedInUser {
     private String displayName;
     private String email;
     private String phoneNumber;
+
     public LoggedInUser(String userId, String displayName){
         this(userId, displayName,"");
     }

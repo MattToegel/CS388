@@ -27,7 +27,7 @@ public class ProfileFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         profileViewModel =
 
-        new ViewModelProvider(this, new ProfileViewModelFactory())
+        new ViewModelProvider(this, new ProfileViewModelFactory(getActivity().getApplication()))
                 .get(ProfileViewModel.class);
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 

@@ -3,6 +3,7 @@ package njit.mt.whackaquack.ui;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -31,7 +32,7 @@ https://developer.android.com/guide/navigation
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
+    LoginRepository loginRepository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +53,20 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        loginRepository =  LoginRepository.getInstance(new LoginDataSource(), getApplicationContext());
         loginRepository.isLoggedIn().observe(this,(isLoggedIn)->{
             Log.v("isLoggedIn", isLoggedIn?"true":"false");
                 Menu nav = navigationView.getMenu();
                 nav.findItem(R.id.nav_login).setVisible(!isLoggedIn);
                 nav.findItem(R.id.nav_profile).setVisible(isLoggedIn);
+                nav.findItem(R.id.nav_logout).setVisible(isLoggedIn);
+                if(isLoggedIn) {
+                    ((MenuItem) nav.findItem(R.id.nav_logout)).setOnMenuItemClickListener((menuItem) -> {
+                        Log.v("Logout button", "pressed");
+                        loginRepository.logout();
+                        return true;
+                    });
+                }
         });
     }
 
