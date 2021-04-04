@@ -21,16 +21,10 @@
         android:name="njit.mt.whackaquack.ui.profile.ProfileFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_profile" />
-
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="njit.mt.whackaquack.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_game"
+        android:name="njit.mt.whackaquack.ui.game.GameFragment"
+        android:label="@string/menu_game"
+        tools:layout="@layout/fragment_game" />
 
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="njit.mt.whackaquack.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
 </navigation>
