@@ -3,6 +3,7 @@ package njit.mt.whackaquack.ui.game;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.Fragment;
@@ -24,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -97,7 +100,7 @@ public class GameFragment extends Fragment {
             mCanvas = new Canvas(mBitmap);
             mCanvas.drawColor(mColorBackground);
         }
-        mCanvas.drawColor(mColorBackground);
+        //mCanvas.drawColor(mColorBackground);
 
 
         mCanvas.drawText(String.format("Touches: %s", touches.size()), 0   , 200, mPaintText);
@@ -109,9 +112,16 @@ public class GameFragment extends Fragment {
             while(iter.hasNext()){
                 List<MotionEvent.PointerCoords> pcs = iter.next();
                 if(pcs != null){
+                    MotionEvent.PointerCoords ppc = null;
                     for(int i = 0; i < pcs.size(); i++){
                         MotionEvent.PointerCoords pc = pcs.get(i);
+                        Random rnd = new Random();
+                        mPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
                         mCanvas.drawCircle(pc.x, pc.y, 50 * pc.pressure, mPaint);
+                        if(ppc != null){
+                            mCanvas.drawLine(pc.x, pc.y, ppc.x, ppc.y, mPaint);
+                        }
+                        ppc = pc;
                     }
 
                 }
@@ -191,6 +201,7 @@ public class GameFragment extends Fragment {
         public void onLongPress(MotionEvent e) {
             Log.i("TAG", "onLongPress: ");
             dumpTouches(e, null);
+
         }
 
         @Override
