@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 nav.findItem(R.id.nav_login).setVisible(!isLoggedIn);
                 nav.findItem(R.id.nav_profile).setVisible(isLoggedIn);
                 nav.findItem(R.id.nav_logout).setVisible(isLoggedIn);
+                nav.findItem(R.id.nav_save_score).setVisible(isLoggedIn);
                 if(isLoggedIn) {
                     ((MenuItem) nav.findItem(R.id.nav_logout)).setOnMenuItemClickListener((menuItem) -> {
                         Log.v("Logout button", "pressed");
