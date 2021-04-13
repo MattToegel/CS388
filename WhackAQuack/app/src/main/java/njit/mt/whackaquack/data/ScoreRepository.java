@@ -30,7 +30,7 @@ public class ScoreRepository {
     }
 
     public void queryScore(String appKey, String uid) {
-        queryScores(appKey, uid, "zEswwUjv5azCOoWBcfBw");
+        queryScores(appKey, uid, uid);
     }
 
     public void queryScores(String appKey, String uid, String startsAfter) {

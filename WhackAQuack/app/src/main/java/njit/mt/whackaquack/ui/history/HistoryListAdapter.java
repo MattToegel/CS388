@@ -27,7 +27,7 @@ public class HistoryListAdapter extends ListAdapter<ScoreData, HistoryViewHolder
         holder.bind(current.getUid(), current.getScore(), current.getCreated());
     }
 
-    static class UserDiff extends DiffUtil.ItemCallback<ScoreData> {
+    static class ScoreDiff extends DiffUtil.ItemCallback<ScoreData> {
 
         @Override
         public boolean areItemsTheSame(@NonNull ScoreData oldItem, @NonNull ScoreData newItem) {
