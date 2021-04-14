@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editScoreField"
+        android:id="@+id/editKeyField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -50,7 +50,7 @@
         android:textAlignment="center"
         app:flow_horizontalAlign="center"
         app:flow_verticalAlign="center"
-        app:layout_constraintBottom_toTopOf="@+id/editScoreField"
+        app:layout_constraintBottom_toTopOf="@+id/editKeyField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -26,7 +26,7 @@ public class SaveScoreFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_save_score, container, false);
 
 
-        final TextView scoreView = root.findViewById(R.id.editScoreField);
+        final TextView scoreView = root.findViewById(R.id.editKeyField);
 
 
         final Button btn = root.findViewById(R.id.saveScoreButton);
