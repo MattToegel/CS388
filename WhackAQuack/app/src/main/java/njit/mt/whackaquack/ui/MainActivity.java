@@ -1,7 +1,9 @@
 package njit.mt.whackaquack.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -15,6 +17,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import njit.mt.whackaquack.R;//Will need to specify this one
+import njit.mt.whackaquack.data.LoginDataSource;
+import njit.mt.whackaquack.data.LoginRepository;
 /* Related Reading
 
 https://developer.android.com/guide/navigation/navigation-migrate
@@ -28,7 +32,7 @@ https://developer.android.com/guide/navigation
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-
+    LoginRepository loginRepository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +47,28 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home,R.id.nav_login, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_login,R.id.nav_home,R.id.nav_profile)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        loginRepository =  LoginRepository.getInstance(new LoginDataSource(), getApplicationContext());
+        loginRepository.isLoggedIn().observe(this,(isLoggedIn)->{
+            Log.v("isLoggedIn", isLoggedIn?"true":"false");
+                Menu nav = navigationView.getMenu();
+                nav.findItem(R.id.nav_login).setVisible(!isLoggedIn);
+                nav.findItem(R.id.nav_profile).setVisible(isLoggedIn);
+                nav.findItem(R.id.nav_logout).setVisible(isLoggedIn);
+                nav.findItem(R.id.nav_save_score).setVisible(isLoggedIn);
+                if(isLoggedIn) {
+                    ((MenuItem) nav.findItem(R.id.nav_logout)).setOnMenuItemClickListener((menuItem) -> {
+                        Log.v("Logout button", "pressed");
+                        loginRepository.logout();
+                        return true;
+                    });
+                }
+        });
     }
 
     @Override

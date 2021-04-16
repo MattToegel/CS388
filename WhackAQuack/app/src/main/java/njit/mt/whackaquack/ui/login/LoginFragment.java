@@ -39,7 +39,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(getActivity().getApplication()))
                 .get(LoginViewModel.class);
         View root = inflater.inflate(R.layout.login_fragment, container, false);
 

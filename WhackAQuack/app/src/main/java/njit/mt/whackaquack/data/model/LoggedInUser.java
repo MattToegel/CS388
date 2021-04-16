@@ -8,6 +8,8 @@ public class LoggedInUser {
     private String userId;
     private String displayName;
     private String email;
+    private String phoneNumber;
+
     public LoggedInUser(String userId, String displayName){
         this(userId, displayName,"");
     }
@@ -19,6 +21,10 @@ public class LoggedInUser {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getPhoneNumber(){
+        return phoneNumber;
     }
 
     public String getDisplayName() {
