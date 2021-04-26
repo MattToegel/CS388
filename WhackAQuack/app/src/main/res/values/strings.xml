@@ -25,4 +25,5 @@
     <string name="menu_profile">Profile</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_game">Game</string>
+    <string name="menu_stats">Stats</string>
 </resources>

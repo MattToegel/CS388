@@ -24,6 +24,7 @@ import njit.mt.whackaquack.data.model.Stats;
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 public class ScoreDataSource {
+
     public void saveScore(ScoreData score, Consumer<Result<Stats>> success, Consumer<Result.Error> error) {
         ANRequest.PostRequestBuilder req = AndroidNetworking.post("https://class.whattheduck.app/api/saveScore");
         if (score.getAppKey() != null) {

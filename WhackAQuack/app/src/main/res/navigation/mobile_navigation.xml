@@ -41,5 +41,10 @@
         android:name="njit.mt.whackaquack.ui.game.GameFragment"
         android:label="@string/menu_game"
         tools:layout="@layout/fragment_game" />
+    <fragment
+        android:id="@+id/nav_stats"
+        android:name="njit.mt.whackaquack.ui.stats.StatsFragment"
+        android:label="@string/menu_stats"
+        tools:layout="@layout/fragment_stats" />
 
 </navigation>

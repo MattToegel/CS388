@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,7 @@ public class GameFragment extends Fragment {
     Bitmap duck;
     Bitmap startButtonImage;
     Bitmap endButtonImage;
+    Bitmap hand;
     private int points = 0;
     private boolean didSpawnDucks = false;
     private GameState gameState = GameState.MENU;
@@ -70,10 +72,12 @@ public class GameFragment extends Fragment {
     private int seconds = 0;
     private int gameDuration = 30;
     private int best = 0;
+
+    private float hx = -1, hy = -1;
     ScoreRepository scoreRepository;
     LoginRepository loginRepository;
     String apiResponse;//just using this since Toast wasn't quite working
-
+    WebView webView;
     ScheduledExecutorService scheduledExecutorService =
             Executors.newSingleThreadScheduledExecutor();
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -98,6 +102,15 @@ public class GameFragment extends Fragment {
         bodyText.setTextSize(42);
         bodyText.setTextAlign(Paint.Align.CENTER);
         duck = BitmapFactory.decodeResource(getResources(), R.drawable.duck);
+        hand = BitmapFactory.decodeResource(getResources(), R.drawable.hand);\
+        //Loading gif example
+        //https://stackoverflow.com/a/4534886
+        webView = (WebView) root.findViewById(R.id.test);
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl("file:///android_res/drawable/hand.gif");
+
         startButtonImage = BitmapFactory.decodeResource(getResources(), R.drawable.start_button);
         endButtonImage = BitmapFactory.decodeResource(getResources(), R.drawable.end_button);
 
@@ -168,6 +181,9 @@ public class GameFragment extends Fragment {
             });
 
         }
+        if(hand != null && hx > -1 && hy > -1){
+            mCanvas.drawBitmap(hand, hx, hy, null);
+        }
     }
     private void drawMenu(int w, int h,Paint p){
         mCanvas.drawColor(mColorBackground);
@@ -192,7 +208,7 @@ public class GameFragment extends Fragment {
 
     }
     private void checkGameEnd(){
-        if(seconds < 0){//check < 0 so user sees it hit 0 before ending
+        if(seconds <= 0){//check < 0 so user sees it hit 0 before ending
             //game over
             LoggedInUser user = loginRepository.getUser();
             if(user != null && user.getUserId() != null){
@@ -301,6 +317,8 @@ public class GameFragment extends Fragment {
                     break;
                 case GAME:
                     //clicking will determine if ducks are hit
+                    hx = start.x;
+                    hy = start.y;
                     ducks.forEach(d->{
                         boolean hit = d.checkHit(start.x, start.y, 5);
                         if(hit){

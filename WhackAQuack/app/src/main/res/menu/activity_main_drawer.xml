@@ -32,6 +32,10 @@
             android:id="@+id/nav_game"
             android:icon="@drawable/ic_baseline_edit_24"
             android:title="@string/menu_game" />
+        <item
+            android:id="@+id/nav_stats"
+            android:icon="@drawable/ic_baseline_edit_24"
+            android:title="@string/menu_stats" />
 
         <item
             android:id="@+id/nav_logout"

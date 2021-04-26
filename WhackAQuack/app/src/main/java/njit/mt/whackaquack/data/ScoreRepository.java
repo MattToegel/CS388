@@ -20,6 +20,11 @@ public class ScoreRepository {
 
     private static volatile ScoreRepository instance;
 
+    private MutableLiveData<Stats> lastStats = new MutableLiveData<>();
+    public LiveData<Stats> getLastStats() {
+        return lastStats;
+    }
+
     private final ScoreDataSource dataSource;
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
@@ -67,6 +72,7 @@ public class ScoreRepository {
     public void saveScore(ScoreData score, Consumer<String> callback) {//TODO: maybe want to pass function here in the future
         dataSource.saveScore(score, (Result<Stats> result) -> {
                     Stats sd = ((Result.Success<Stats>) result).getData();
+                    lastStats.setValue(sd);
                     Log.v("Saved score result", sd.toString());
                     if(callback != null) {
                         callback.accept(String.format("You now have %s Bills and %s Experience!", sd.getPoints(), sd.getExperience()));
