@@ -102,7 +102,7 @@ public class GameFragment extends Fragment {
         bodyText.setTextSize(42);
         bodyText.setTextAlign(Paint.Align.CENTER);
         duck = BitmapFactory.decodeResource(getResources(), R.drawable.duck);
-        hand = BitmapFactory.decodeResource(getResources(), R.drawable.hand);\
+        hand = BitmapFactory.decodeResource(getResources(), R.drawable.hand);
         //Loading gif example
         //https://stackoverflow.com/a/4534886
         webView = (WebView) root.findViewById(R.id.test);

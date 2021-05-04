@@ -1,6 +1,7 @@
 package njit.mt.whackaquack.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -40,6 +41,7 @@ public class DataStoreRepository {
             d = new Data(key, new JSONObject(value));
             d.setUid(uid);
             d.setAppKey(appKey);
+            Log.v("setting data", d.toString());
             dataSource.setData(d, (Result<Data> s) -> {
                 Data rd = ((Result.Success<Data>) s).getData();
                 lastData.setValue(rd);
