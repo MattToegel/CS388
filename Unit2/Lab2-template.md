@@ -1,6 +1,6 @@
 # Lab 2: CodepathMail
 
-Course Link: [CodePath Android Course](https://courses.codepath.org/courses/and102/unit/1#!labs)
+Course Link: [CodePath Android Course](https://courses.codepath.org/courses/and102/unit/2#!labs)
 
 Submitted by: **Your Name Here** <!-- Replace 'Your Name Here' with your actual name -->
 
