@@ -87,3 +87,6 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+# Added for Unit 3 Lesson of Cat API
+apikey.properties

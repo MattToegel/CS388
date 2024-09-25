@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SearchActivity">
+
+    <!-- Spinner for selecting a breed -->
+    <Spinner
+        android:id="@+id/spinnerBreeds"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp" />
+
+    <!-- Input field for page number -->
+    <EditText
+        android:id="@+id/editTextPage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Page"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/spinnerBreeds"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        />
+
+    <!-- Input field for limit -->
+    <EditText
+        android:id="@+id/editTextLimit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Limit"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/editTextPage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="10"
+        />
+
+    <!-- Spinner for selecting order -->
+    <Spinner
+        android:id="@+id/spinnerOrder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/editTextLimit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Button to trigger search -->
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        app:layout_constraintTop_toBottomOf="@id/spinnerOrder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- TextView to display "No results" -->
+    <TextView
+        android:id="@+id/textViewNoResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No results"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/buttonSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- RecyclerView to display cat images -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        app:layout_constraintTop_toBottomOf="@id/textViewNoResults"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

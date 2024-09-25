@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CatActivity">
+
+    <!-- Button to trigger the basic API test -->
+    <Button
+        android:id="@+id/button_basic_api_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Basic API Test"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:onClick="onTest" />
+
+    <!-- Button to trigger the JSON API request -->
+    <Button
+        android:id="@+id/button_json_api_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="JSON API Test"
+        app:layout_constraintTop_toBottomOf="@+id/button_basic_api_test"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginTop="16dp" />
+
+    <!-- Button to trigger the image upload API test -->
+    <Button
+        android:id="@+id/button_upload_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Image"
+        app:layout_constraintTop_toBottomOf="@+id/button_json_api_test"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginTop="16dp" />
+
+    <!-- Button to trigger the download image API test -->
+    <Button
+        android:id="@+id/button_download_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download Image"
+        app:layout_constraintTop_toBottomOf="@+id/button_upload_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginTop="16dp" />
+
+    <!-- Button to open SearchActivity -->
+    <Button
+        android:id="@+id/button_open_search_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search Images"
+        app:layout_constraintTop_toBottomOf="@+id/button_download_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginTop="16dp" />
+
+    <!-- ImageView to display downloaded images -->
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/button_download_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:scaleType="centerCrop"
+        android:contentDescription="Downloaded Image"/>
+
+    <!-- TextView to display API responses -->
+    <TextView
+        android:id="@+id/text_view_response"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/image_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Response will be shown here"
+        android:textAlignment="center"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
