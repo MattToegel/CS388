@@ -26,6 +26,7 @@ android {
         }
 
         // Inject the API key into BuildConfig
+
         buildConfigField("String", "api_key", "\"${apikeyProperties["api_key"]}\"")
     }
 
