@@ -36,3 +36,7 @@
 
 8. **UI Consistency**:
    - Ensure a consistent look and feel across all screens, with consistent use of fonts, colors, and layouts.
+
+9. **Link to these requirements**:
+   - Include a link to this markdown file in your project's markdown file (e.g., README.md).
+   - Optionally, copy these requirements into your markdown so they are visible without needing to navigate.
