@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "359333445602",
+    "project_number": "",
     "project_id": "cs388-todo",
-    "storage_bucket": "cs388-todo.firebasestorage.app"
+    "storage_bucket": ""
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:359333445602:android:14871ccfa9deb9ad7983bb",
+        "mobilesdk_app_id": "",
         "android_client_info": {
-          "package_name": "com.ethereallab.fb_todo"
+          "package_name": ""
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC5dJHwHhPjAU38aZG0rBHDafnJp1kklCg"
+          "current_key": ""
         }
       ],
       "services": {
