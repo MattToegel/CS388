@@ -1,0 +1,26 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/lobbyFragment">
+
+    <fragment
+        android:id="@+id/lobbyFragment"
+        android:name="com.ethereallab.chaoticbattleship.fragments.LobbyFragment"
+        android:label="Lobby" >
+        <action
+            android:id="@+id/action_lobbyFragment_to_viewLobbyFragment"
+            app:destination="@id/viewLobbyFragment" />
+        <action
+            android:id="@+id/action_lobbyFragment_to_listLobbiesFragment"
+            app:destination="@id/listLobbiesFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/viewLobbyFragment"
+        android:name="com.ethereallab.chaoticbattleship.fragments.ViewLobbyFragment"
+        android:label="View Lobby" />
+
+    <fragment
+        android:id="@+id/listLobbiesFragment"
+        android:name="com.ethereallab.chaoticbattleship.fragments.ListLobbiesFragment"
+        android:label="List Lobbies" />
+</navigation>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.ethereallab.chaoticbattleship.databinding.ActivityMainBinding
+import com.ethereallab.chaoticbattleship.fragments.LobbyFragment
 import com.ethereallab.fb_todo.fragments.HomeFragment
 
 import com.google.firebase.auth.FirebaseAuth
@@ -36,6 +37,10 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home -> {
                     replaceFragment(HomeFragment())
+                    true
+                }
+                R.id.nav_lobby -> {
+                    replaceFragment(LobbyFragment())
                     true
                 }
                 /*R.id.nav_pending -> {
