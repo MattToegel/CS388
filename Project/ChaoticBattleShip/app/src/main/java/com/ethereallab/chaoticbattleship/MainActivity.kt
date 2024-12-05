@@ -8,6 +8,7 @@ import com.ethereallab.chaoticbattleship.databinding.ActivityMainBinding
 import com.ethereallab.chaoticbattleship.fragments.LobbyFragment
 import com.ethereallab.fb_todo.fragments.HomeFragment
 
+
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
