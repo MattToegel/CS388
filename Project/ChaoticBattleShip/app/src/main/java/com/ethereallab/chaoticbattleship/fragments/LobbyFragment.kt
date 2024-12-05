@@ -1,6 +1,7 @@
 package com.ethereallab.chaoticbattleship.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import com.ethereallab.chaoticbattleship.LobbyItem
 import com.ethereallab.chaoticbattleship.databinding.FragmentLobbyBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 
 class LobbyFragment : Fragment() {
 
@@ -64,15 +67,21 @@ class LobbyFragment : Fragment() {
             "currentPlayers" to listOf(currentUser.uid),
             "status" to "open"
         )
-
+        Log.d("LobbyFragment", "Before block")
+        // TODO, blocking wait in class example
+        runBlocking {
+            val result = db.collection("lobbies").add(lobby).await();
+            Log.d("LobbyFragment", "Lobby created with ID: ${result.id}")
+        }
+        Log.d("LobbyFragment", "After block")
         db.collection("lobbies")
             .add(lobby)
             .addOnSuccessListener { document ->
                 Toast.makeText(requireContext(), "Lobby created successfully!", Toast.LENGTH_SHORT).show()
 
                 // Navigate to the View Lobby page, passing the created lobby ID
-                val action = LobbyFragmentDirections.actionLobbyFragmentToViewLobbyFragment(document.id)
-                findNavController().navigate(action)
+                /*val action = LobbyFragmentDirections.actionLobbyFragmentToViewLobbyFragment(document.id)
+                findNavController().navigate(action)*/
             }
             .addOnFailureListener { e ->
                 Toast.makeText(requireContext(), "Failed to create lobby: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -103,8 +112,8 @@ class LobbyFragment : Fragment() {
                     }
 
                     // Navigate to the List Lobbies page, passing the search results
-                    val action = LobbyFragmentDirections.actionLobbyFragmentToListLobbiesFragment(lobbies.toTypedArray())
-                    findNavController().navigate(action)
+                   /* val action = LobbyFragmentDirections.actionLobbyFragmentToListLobbiesFragment(lobbies.toTypedArray())
+                    findNavController().navigate(action)*/
                 }
             }
             .addOnFailureListener { e ->
