@@ -1,0 +1,47 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:background="@android:color/white"
+    android:layout_marginBottom="8dp">
+
+    <!-- Lobby Name -->
+    <TextView
+        android:id="@+id/lobby_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Lobby Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/lobby_max_players"
+        app:layout_constraintHorizontal_chainStyle="packed" />
+
+    <!-- Max Players -->
+    <TextView
+        android:id="@+id/lobby_max_players"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Max Players: 4"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/lobby_join_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/lobby_name"
+        app:layout_constraintHorizontal_chainStyle="packed" />
+
+    <!-- Join/View Button -->
+    <Button
+        android:id="@+id/lobby_join_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

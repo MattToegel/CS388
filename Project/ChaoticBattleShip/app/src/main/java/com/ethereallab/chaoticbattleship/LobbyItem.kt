@@ -8,5 +8,6 @@ data class LobbyItem(
     val id: String,
     val name: String,
     val maxPlayers: Int,
-    val status: String
+    val status: String,
+    val currentPlayers: List<String>
 ) : Parcelable

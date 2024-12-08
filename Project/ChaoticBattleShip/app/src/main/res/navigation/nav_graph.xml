@@ -1,26 +1,71 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:startDestination="@id/lobbyFragment">
+    app:startDestination="@id/nav_home">
 
+    <!-- Home Fragment -->
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.ethereallab.chaoticbattleship.fragments.HomeFragment"
+        android:label="Home">
+        <action
+            android:id="@+id/action_home_to_lobbyFragment"
+            app:destination="@id/lobbyFragment" />
+    </fragment>
+
+    <!-- Lobby Fragment -->
     <fragment
         android:id="@+id/lobbyFragment"
         android:name="com.ethereallab.chaoticbattleship.fragments.LobbyFragment"
-        android:label="Lobby" >
+        android:label="Lobby">
         <action
-            android:id="@+id/action_lobbyFragment_to_viewLobbyFragment"
-            app:destination="@id/viewLobbyFragment" />
+            android:id="@+id/action_lobbyFragment_to_createLobbyFragment"
+            app:destination="@id/createLobbyFragment" />
         <action
             android:id="@+id/action_lobbyFragment_to_listLobbiesFragment"
             app:destination="@id/listLobbiesFragment" />
     </fragment>
 
+    <!-- Create Lobby Fragment -->
     <fragment
-        android:id="@+id/viewLobbyFragment"
-        android:name="com.ethereallab.chaoticbattleship.fragments.ViewLobbyFragment"
-        android:label="View Lobby" />
+        android:id="@+id/createLobbyFragment"
+        android:name="com.ethereallab.chaoticbattleship.fragments.CreateLobbyFragment"
+        android:label="Create Lobby">
+        <action
+            android:id="@+id/action_createLobbyFragment_to_viewLobbyFragment"
+            app:destination="@id/viewLobbyFragment" />
+    </fragment>
 
+    <!-- List Lobbies Fragment -->
     <fragment
         android:id="@+id/listLobbiesFragment"
         android:name="com.ethereallab.chaoticbattleship.fragments.ListLobbiesFragment"
-        android:label="List Lobbies" />
+        android:label="List Lobbies">
+        <argument
+            android:name="lobbyName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="maxPlayers"
+            app:argType="integer"
+            app:nullable="false" />
+        <action
+            android:id="@+id/action_listLobbiesFragment_to_viewLobbyFragment"
+            app:destination="@id/viewLobbyFragment" />
+    </fragment>
+
+    <!-- View Lobby Fragment -->
+    <fragment
+        android:id="@+id/viewLobbyFragment"
+        android:name="com.ethereallab.chaoticbattleship.fragments.ViewLobbyFragment"
+        android:label="View Lobby">
+        <argument
+            android:name="lobbyId"
+            app:argType="string"
+            app:nullable="false" />
+        <action
+            android:id="@+id/action_viewLobbyFragment_to_lobbyFragment"
+            app:destination="@id/lobbyFragment"
+            app:popUpTo="@id/lobbyFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

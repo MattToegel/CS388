@@ -5,45 +5,52 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <!-- Lobby Name -->
     <TextView
-        android:id="@+id/lobbyNameTextView"
+        android:id="@+id/lobbyName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Lobby Name: Placeholder"
+        android:text="Lobby Name"
         android:textSize="18sp"
-        android:layout_marginBottom="16dp"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp" />
 
+    <!-- Current Players -->
     <TextView
-        android:id="@+id/lobbyPlayersTextView"
+        android:id="@+id/currentPlayers"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Players: 1/4"
+        android:text="Players: 0"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/lobbyNameTextView"
+        app:layout_constraintTop_toBottomOf="@id/lobbyName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp" />
 
+    <!-- Max Players -->
     <TextView
-        android:id="@+id/lobbyStatusTextView"
+        android:id="@+id/maxPlayers"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Status: Open"
+        android:text="Max Players: 0"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/lobbyPlayersTextView"
+        app:layout_constraintTop_toBottomOf="@id/currentPlayers"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp" />
 
+    <!-- Leave Lobby Button -->
     <Button
         android:id="@+id/leaveLobbyButton"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Leave Lobby"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/lobbyStatusTextView"
+        app:layout_constraintTop_toBottomOf="@id/maxPlayers"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

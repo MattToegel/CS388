@@ -2,7 +2,13 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home_24"
-        android:title="Home"/>
-    <item android:id="@+id/nav_lobby" android:title="Lobby" android:icon="@drawable/ic_list_24" />
-    <item android:id="@+id/nav_completed" android:title="Completed" android:icon="@drawable/ic_checklist_24" />
+        android:title="Home" />
+    <item
+        android:id="@+id/lobbyFragment"
+        android:icon="@drawable/ic_list_24"
+        android:title="Lobby" />
+    <item
+        android:id="@+id/nav_completed"
+        android:icon="@drawable/ic_checklist_24"
+        android:title="Completed" />
 </menu>

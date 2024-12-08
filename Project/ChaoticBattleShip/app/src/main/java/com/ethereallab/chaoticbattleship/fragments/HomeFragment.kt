@@ -1,5 +1,4 @@
-package com.ethereallab.fb_todo.fragments
-
+package com.ethereallab.chaoticbattleship.fragments
 
 import android.content.Intent
 import android.os.Bundle

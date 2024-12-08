@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny for all data
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Lobbies collection
+    match /lobbies/{lobbyId} {
+
+      // Allow lobby creation by authenticated users with valid data
+      allow create: if request.auth != null && isValidLobbyData();
+
+      // Allow reading for authenticated users
+      allow read: if request.auth != null;
+
+      // Allow updating lobbies only for players in the currentPlayers list
+      allow update: if request.auth != null && canUpdateLobby();
+
+      // Allow lobby deletion only if currentPlayers is empty
+      allow delete: if request.auth != null && (resource.data.currentPlayers.size() == 0
+	|| (resource.data.currentPlayers.size() == 1 && request.auth.uid in resource.data.currentPlayers));
+
+      // Function: Validate lobby data
+      function isValidLobbyData() {
+        return request.resource.data.keys().hasOnly(["name", "maxPlayers", "currentPlayers", "status"]) &&
+               request.resource.data.name is string &&
+               request.resource.data.name.size() > 0 &&
+               request.resource.data.maxPlayers is int &&
+               request.resource.data.maxPlayers >= 2 &&
+               request.resource.data.currentPlayers is list &&
+               request.resource.data.currentPlayers.size() == 1 &&
+               request.resource.data.currentPlayers[0] == request.auth.uid &&
+               request.resource.data.status in ["open", "full"]; // Allow specific statuses
+      }
+
+      // Function: Check if the user is in the currentPlayers list and update is valid
+      function canUpdateLobby() {
+          return request.auth.uid in request.resource.data.currentPlayers // User must be in the incoming list
+              && request.resource.data.currentPlayers is list // Ensure incoming data is a list
+              && (
+                  !("currentPlayers" in resource.data) // Allow if currentPlayers doesn't exist yet
+                  || !(request.auth.uid in resource.data.currentPlayers) // Ensure the user isn't already in the list
+              )
+              && request.resource.data.currentPlayers == resource.data.currentPlayers.concat([request.auth.uid]) // Ensure update is adding the user
+              && resource.data.currentPlayers.size() + 1 <= resource.data.maxPlayers; // Ensure maxPlayers is respected
+      }
+    }
+  }
+}

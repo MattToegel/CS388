@@ -4,6 +4,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt") // Enables annotation processing for Kotlin
     id("kotlin-parcelize")
+    id("androidx.navigation.safeargs.kotlin") // Safe Args plugin
 }
 
 android {
