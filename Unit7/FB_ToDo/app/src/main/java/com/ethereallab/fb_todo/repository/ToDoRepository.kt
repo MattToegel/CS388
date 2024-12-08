@@ -68,13 +68,17 @@ class ToDoRepository(context: Context) {
     // Add new todo
     suspend fun addTodo(todo: Todo) = withContext(Dispatchers.IO) {
         val userId = auth.currentUser?.uid ?: throw IllegalStateException("User is not logged in")
-        val newTodo = todo.copy(userId = userId)
+        var newTodo = todo.copy(userId = userId)
         val newId = db.todoDao().insert(newTodo)
+        // make a copy and set localId (localId property is val so can't be edited
+        newTodo = todo.copy(localId = newId.toInt()) // maps localId so update works
         Log.d(tag, "Todo added to Room with local ID $newId")
 
         try {
             val document = firestore.collection("todos").add(newTodo).await()
             newTodo.firestoreId = document.id
+            // updates firebase document with the firestoreId so it's not null (likely optional and there are better ways)
+            firestore.collection("todos").document(document.id).update("firestoreId", document.id)
             db.todoDao().update(newTodo)
             Log.d(tag, "Synced new todo to Firestore with Firestore ID ${newTodo.firestoreId}")
         } catch (e: Exception) {
