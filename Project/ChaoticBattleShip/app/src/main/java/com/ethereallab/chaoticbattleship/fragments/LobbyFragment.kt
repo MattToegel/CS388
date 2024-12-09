@@ -31,7 +31,11 @@ class LobbyFragment : Fragment() {
         binding.searchLobbyButton.setOnClickListener {
             findNavController().navigate(R.id.action_lobbyFragment_to_listLobbiesFragment)
         }
+        binding.userLobbiesButton.setOnClickListener {
+            findNavController().navigate(R.id.action_lobbyFragment_to_userLobbiesFragment)
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_lobbyFragment_to_listLobbiesFragment"
             app:destination="@id/listLobbiesFragment" />
+        <action
+            android:id="@+id/action_lobbyFragment_to_userLobbiesFragment"
+            app:destination="@id/userLobbiesFragment" />
     </fragment>
 
     <!-- Create Lobby Fragment -->
@@ -71,6 +74,7 @@
             android:id="@+id/action_viewLobbyFragment_to_readyCheckFragment"
             app:destination="@id/readyCheckFragment" />
     </fragment>
+
     <!-- Ready Check Fragment -->
     <fragment
         android:id="@+id/readyCheckFragment"
@@ -80,6 +84,37 @@
             android:name="lobbyId"
             app:argType="string"
             app:nullable="false" />
+        <action
+            android:id="@+id/action_readyCheckFragment_to_gameGridFragment"
+            app:destination="@id/gameGridFragment" />
     </fragment>
 
+    <!-- Grid Fragment -->
+    <fragment
+        android:id="@+id/gameGridFragment"
+        android:name="com.ethereallab.chaoticbattleship.fragments.GameGridFragment"
+        android:label="Game Grid">
+        <argument
+            android:name="lobbyId"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
+    <!-- User Lobbies Fragment -->
+    <fragment
+        android:id="@+id/userLobbiesFragment"
+        android:name="com.ethereallab.chaoticbattleship.fragments.UserLobbiesFragment"
+        android:label="My Lobbies" >
+        <action
+            android:id="@+id/action_userLobbiesFragment_to_viewLobbyFragment"
+            app:destination="@id/viewLobbyFragment" />
+        <action
+            android:id="@+id/action_userLobbiesFragment_to_gameGridFragment"
+            app:destination="@id/gameGridFragment">
+            <argument
+                android:name="lobbyId"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+    </fragment>
 </navigation>

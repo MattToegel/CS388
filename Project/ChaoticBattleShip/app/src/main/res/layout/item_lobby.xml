@@ -34,6 +34,20 @@
         app:layout_constraintStart_toEndOf="@id/lobby_name"
         app:layout_constraintHorizontal_chainStyle="packed" />
 
+    <!-- Lobby Status -->
+    <TextView
+        android:id="@+id/lobby_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Status: Open"
+        android:textSize="14sp"
+        android:textColor="@android:color/holo_blue_dark"
+        app:layout_constraintTop_toBottomOf="@id/lobby_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/lobby_join_button"
+        app:layout_constraintHorizontal_chainStyle="packed" />
+
     <!-- Join/View Button -->
     <Button
         android:id="@+id/lobby_join_button"

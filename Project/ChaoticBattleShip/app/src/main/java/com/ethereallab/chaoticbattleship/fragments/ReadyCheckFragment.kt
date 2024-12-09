@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ethereallab.chaoticbattleship.adapters.PlayersAdapter
 import com.ethereallab.chaoticbattleship.databinding.FragmentReadyCheckBinding
@@ -61,11 +62,24 @@ class ReadyCheckFragment : Fragment() {
                     isReady = readyPlayers.contains(currentPlayerId)
 
                     updateUIBasedOnStatus(status)
+
+                    // Navigate to GameGridFragment if the status is "place"
+                    if (status == "place") {
+                        navigateToGameGrid()
+                    }
+
                     setupRecyclerView()
                 }
             }
         }
     }
+    private fun navigateToGameGrid() {
+        val action = ReadyCheckFragmentDirections.actionReadyCheckFragmentToGameGridFragment(
+            lobbyId = lobbyId ?: ""
+        )
+        findNavController().navigate(action)
+    }
+
 
     private fun updateUIBasedOnStatus(status: String) {
         // Hide ready button if the status is not "open"
@@ -102,6 +116,7 @@ class ReadyCheckFragment : Fragment() {
                         "Session started successfully",
                         Toast.LENGTH_SHORT
                     ).show()
+                    navigateToGameGrid()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(

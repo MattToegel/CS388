@@ -31,16 +31,20 @@ class LobbiesAdapter(
     class LobbyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val lobbyName = itemView.findViewById<TextView>(R.id.lobby_name)
         private val maxPlayers = itemView.findViewById<TextView>(R.id.lobby_max_players)
+        private val lobbyStatus = itemView.findViewById<TextView>(R.id.lobby_status) // Status TextView
         private val actionButton = itemView.findViewById<Button>(R.id.lobby_join_button)
 
         fun bind(lobby: LobbyItem, isInLobby: Boolean, onLobbyAction: (LobbyItem, Boolean) -> Unit) {
             lobbyName.text = lobby.name
             maxPlayers.text = "Max Players: ${lobby.maxPlayers}"
-            actionButton.text = if (isInLobby) "View" else "Join"
+            lobbyStatus.text = "Status: ${lobby.status}" // Add status to display
 
+            actionButton.text = if (isInLobby) "View" else "Join"
             actionButton.setOnClickListener {
                 onLobbyAction(lobby, isInLobby)
             }
         }
     }
+
+
 }
