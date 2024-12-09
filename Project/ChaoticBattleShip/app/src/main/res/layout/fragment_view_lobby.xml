@@ -53,4 +53,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
+    <!-- Ready Check Button -->
+    <Button
+        android:id="@+id/readyCheckButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ready Check"
+        app:layout_constraintTop_toBottomOf="@id/leaveLobbyButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

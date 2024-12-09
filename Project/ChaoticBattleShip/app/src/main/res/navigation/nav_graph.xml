@@ -67,5 +67,19 @@
             app:destination="@id/lobbyFragment"
             app:popUpTo="@id/lobbyFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_viewLobbyFragment_to_readyCheckFragment"
+            app:destination="@id/readyCheckFragment" />
     </fragment>
+    <!-- Ready Check Fragment -->
+    <fragment
+        android:id="@+id/readyCheckFragment"
+        android:name="com.ethereallab.chaoticbattleship.fragments.ReadyCheckFragment"
+        android:label="Ready Check">
+        <argument
+            android:name="lobbyId"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
 </navigation>

@@ -31,6 +31,12 @@ class ViewLobbyFragment : Fragment() {
         binding.leaveLobbyButton.setOnClickListener {
             leaveLobby(lobbyId)
         }
+        binding.readyCheckButton.setOnClickListener {
+            lobbyId?.let { id ->
+                val action = ViewLobbyFragmentDirections.actionViewLobbyFragmentToReadyCheckFragment(id)
+                findNavController().navigate(action)
+            }
+        }
 
         return binding.root
     }

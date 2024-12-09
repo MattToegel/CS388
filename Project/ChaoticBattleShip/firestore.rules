@@ -18,7 +18,7 @@ service cloud.firestore {
       allow read: if request.auth != null;
 
       // Allow updating lobbies only for players in the currentPlayers list
-      allow update: if request.auth != null && canUpdateLobby();
+      allow update: if request.auth != null && (canUpdateLobby() || isReadyCheckValid() || canStart());
 
       // Allow lobby deletion only if currentPlayers is empty
       allow delete: if request.auth != null && (resource.data.currentPlayers.size() == 0
@@ -47,6 +47,23 @@ service cloud.firestore {
               )
               && request.resource.data.currentPlayers == resource.data.currentPlayers.concat([request.auth.uid]) // Ensure update is adding the user
               && resource.data.currentPlayers.size() + 1 <= resource.data.maxPlayers; // Ensure maxPlayers is respected
+      }
+			function isReadyCheckValid() {
+          return resource.data.status == "open" && request.auth.uid in resource.data.currentPlayers
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readyPlayers']);
+      }
+      function canStart(){
+      return resource.data.status == "open" && request.resource.data.status == "place"
+      && resource.data.currentPlayers.size() == resource.data.readyPlayers.size();
+      }
+
+
+
+
+      // Function: Check if the lobby is empty
+      function isLobbyEmpty(lobbyId) {
+        let lobby = get(/databases/$(database)/documents/lobbies/$(lobbyId));
+        return lobby.data.currentPlayers.size() == 0;
       }
     }
   }
