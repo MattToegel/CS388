@@ -6,7 +6,6 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin") // Safe Args plugin
 }
-
 android {
     namespace = "com.ethereallab.chaoticbattleship"
     compileSdk = 35
@@ -17,7 +16,6 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {

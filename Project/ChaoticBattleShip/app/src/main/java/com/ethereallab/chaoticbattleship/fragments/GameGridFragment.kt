@@ -13,6 +13,7 @@ import com.ethereallab.chaoticbattleship.views.GameGridView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 class GameGridFragment : Fragment() {
 
@@ -38,7 +39,6 @@ class GameGridFragment : Fragment() {
             showToast("Lobby ID and Player ID are required")
             return binding.root
         }
-
         fetchLobbyDetails()
         setupListeners()
 
@@ -80,6 +80,7 @@ class GameGridFragment : Fragment() {
         if (mode == Mode.ATTACK) {
             binding.currentPlayerTurnText.text = "Current Turn: $currentTurnPlayer"
             binding.currentPlayerTurnText.visibility = View.VISIBLE
+            binding.gameGridView.setMode(Mode.ATTACK)
         } else {
             binding.currentPlayerTurnText.visibility = View.GONE
         }
@@ -88,7 +89,8 @@ class GameGridFragment : Fragment() {
             if (playerId in placedShips) {
                 binding.actionButton.visibility = View.GONE
                 binding.waitingMessageText.visibility = View.VISIBLE
-                binding.gameGridView.setMode(Mode.NONE)
+                mode = Mode.NONE
+                binding.gameGridView.setMode(mode)
             } else {
                 binding.actionButton.visibility = View.VISIBLE
                 binding.waitingMessageText.visibility = View.GONE
@@ -103,7 +105,9 @@ class GameGridFragment : Fragment() {
                 val flatGridData = document.get("grid") as? List<Map<String, Any>>
                 val gridData = flatGridData?.let { reconstructGrid(it) } ?: initializeGrid()
                 binding.gameGridView.setPlacementData(gridData)
-                //binding.gameGridView.setMode(mode)
+                if (mode != Mode.NONE) {
+                    binding.gameGridView.setMode(mode)
+                }
             }
             .addOnFailureListener { e ->
                 showToast("Failed to load grid: ${e.message}")
@@ -128,8 +132,19 @@ class GameGridFragment : Fragment() {
 
     private fun setupListeners() {
         binding.actionButton.setOnClickListener {
-            if (mode == Mode.PLACEMENT) confirmPlacement()
-            else showToast("Attack mode not yet implemented.")
+            when (mode) {
+                Mode.PLACEMENT -> confirmPlacement()
+                Mode.ATTACK -> {
+                    val selectedCell = binding.gameGridView.getSelectedAttackCell()
+                    if (selectedCell != null) {
+                        val (row, col) = selectedCell
+                        handleAttack(row, col)
+                    } else {
+                        showToast("Please select a cell to attack!")
+                    }
+                }
+                else -> showToast("Invalid mode")
+            }
         }
     }
 
@@ -177,21 +192,109 @@ class GameGridFragment : Fragment() {
             }
         }
 
-        db.collection("shipPlacements").document("$lobbyId-$playerId").set(
+        // Start a batch write for efficient updates
+        val batch = db.batch()
+
+        // Step 1: Update the `shipPlacements` document
+        val placementRef = db.collection("shipPlacements").document("$lobbyId-$playerId")
+        batch.set(
+            placementRef,
             mapOf("lobbyId" to lobbyId, "playerId" to playerId, "grid" to flattenedGridData)
-        ).addOnSuccessListener {
-            db.collection("lobbies").document(lobbyId!!)
-                .update("placedShips", FieldValue.arrayUnion(playerId))
-                .addOnSuccessListener {
-                    binding.actionButton.visibility = View.GONE
-                    binding.waitingMessageText.visibility = View.VISIBLE
-                    binding.gameGridView.setMode(Mode.NONE)
-                    showToast("Ship placement confirmed!")
-                    checkAndStartAttackPhase()
+        )
+        Log.d("GameGridFragment", "Queued shipPlacement for $playerId")
+
+        // Step 2: Update each cell in the `gameBoard` collection
+        shipPlacementData.forEachIndexed { row, rowData ->
+            rowData.forEachIndexed { col, cellData ->
+                val ships = cellData["ships"] as? Int ?: 0
+                if (ships > 0) {
+                    val cellId = "$lobbyId-$row-$col"
+                    val cellRef = db.collection("gameBoard").document(cellId)
+
+                    // Create or update the cell document
+                    batch.set(
+                        cellRef,
+                        mapOf(
+                            "playerShips.$playerId" to ships // Add/update player's ship count in this cell
+                        ),
+                        SetOptions.merge() // Merge with existing data
+                    )
+                    Log.d("GameGridFragment", "Queued gameBoard update for $cellId")
                 }
-        }.addOnFailureListener { e ->
-            showToast("Failed to confirm placement: ${e.message}")
+            }
         }
+
+        // Step 3: Update the `lobbies` document
+        val lobbyRef = db.collection("lobbies").document(lobbyId!!)
+        batch.update(
+            lobbyRef,
+            mapOf(
+                "placedShips" to FieldValue.arrayUnion(playerId),
+                "remainingShips.$playerId" to totalShips // Update the player's total ships in lobby
+            )
+        )
+        Log.d("GameGridFragment", "Queued lobby update for $lobbyId")
+
+        // Commit the batch
+        batch.commit()
+            .addOnSuccessListener {
+                binding.actionButton.visibility = View.GONE
+                binding.waitingMessageText.visibility = View.VISIBLE
+                binding.gameGridView.setMode(Mode.NONE)
+                showToast("Ship placement confirmed!")
+                checkAndStartAttackPhase()
+            }
+            .addOnFailureListener { e ->
+                Log.e("GameGridFragment", "Batch commit failed: ${e.message}")
+                showToast("Failed to confirm placement: ${e.message}")
+            }
+    }
+
+
+
+
+
+
+    private fun handleAttack(row: Int, col: Int) {
+        val cellId = "$lobbyId-$row-$col"
+        db.collection("gameBoard").document(cellId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.exists()) {
+                    // If the document doesn't exist, it's a miss
+                    showToast("Miss!")
+                    return@addOnSuccessListener
+                }
+
+                val cellData = document.data ?: return@addOnSuccessListener
+                val playerShips = cellData["playerShips"] as? Map<String, Long> ?: emptyMap()
+
+                // Update the lobby's remainingShips based on the cell data
+                val updates = mutableMapOf<String, Any>()
+                playerShips.forEach { (playerId, shipCount) ->
+                    if (shipCount > 0) {
+                        updates["remainingShips.$playerId"] = FieldValue.increment(-1)
+                    }
+                }
+
+                // Check if this cell has already been hit
+                if (cellData["firstHitBy"] == null) {
+                    updates["firstHitBy"] = auth.currentUser!!.uid
+                    db.collection("gameBoard").document(cellId)
+                        .update(updates)
+                        .addOnSuccessListener {
+                            showToast("Hit!")
+                        }
+                        .addOnFailureListener { e ->
+                            showToast("Failed to record hit: ${e.message}")
+                        }
+                } else {
+                    showToast("Miss!")
+                }
+            }
+            .addOnFailureListener { e ->
+                showToast("Failed to fetch cell data: ${e.message}")
+            }
     }
 
     private fun initializeGrid(): List<List<Map<String, Any>>> {

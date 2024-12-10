@@ -164,7 +164,9 @@ class GameGridView @JvmOverloads constructor(
         selectedAttackCell = Pair(row, col)
         invalidate()
     }
-
+    fun getSelectedAttackCell(): Pair<Int, Int>? {
+        return selectedAttackCell
+    }
     fun setPlacementData(data: List<List<Map<String, Any>>>) {
         gridData = MutableList(gridSize) { row ->
             MutableList(gridSize) { col ->

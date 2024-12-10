@@ -1,6 +1,7 @@
 package com.ethereallab.chaoticbattleship.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ethereallab.chaoticbattleship.R
 import com.ethereallab.chaoticbattleship.adapters.PlayersAdapter
 import com.ethereallab.chaoticbattleship.databinding.FragmentReadyCheckBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -25,7 +27,7 @@ class ReadyCheckFragment : Fragment() {
     private var currentPlayers = listOf<String>()
     private var readyPlayers = listOf<String>()
     private var isReady = false
-
+    private var hasNavigatedToGameGrid = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,19 +41,27 @@ class ReadyCheckFragment : Fragment() {
 
         return binding.root
     }
+    override fun onResume() {
+        super.onResume()
+        hasNavigatedToGameGrid = false // Reset the flag when the fragment is resumed
+    }
 
     private fun fetchLobbyDetails() {
         lobbyId?.let { id ->
             db.collection("lobbies").document(id).addSnapshotListener { snapshot, e ->
                 if (e != null) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Error fetching lobby: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if (_binding != null) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Error fetching lobby: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                     return@addSnapshotListener
                 }
                 snapshot?.let {
+                    if (_binding == null) return@addSnapshotListener // Stop if the view is destroyed
+
                     currentPlayers = it.get("currentPlayers") as? List<String> ?: emptyList()
                     readyPlayers = it.get("readyPlayers") as? List<String> ?: emptyList()
                     val status = it.getString("status") ?: "unknown"
@@ -73,12 +83,42 @@ class ReadyCheckFragment : Fragment() {
             }
         }
     }
+
+
+
+
+
     private fun navigateToGameGrid() {
-        val action = ReadyCheckFragmentDirections.actionReadyCheckFragmentToGameGridFragment(
-            lobbyId = lobbyId ?: ""
-        )
-        findNavController().navigate(action)
+        if (hasNavigatedToGameGrid) {
+            Log.d("NavController", "Already navigated to GameGridFragment. Skipping navigation.")
+            return
+        }
+
+        if (lobbyId.isNullOrBlank()) {
+            Log.e("NavController", "Cannot navigate: lobbyId is null or blank.")
+            Toast.makeText(requireContext(), "Lobby ID is missing.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val navController = findNavController()
+        val currentDestination = navController.currentDestination?.id
+
+        if (currentDestination == R.id.readyCheckFragment) {
+            val action = ReadyCheckFragmentDirections.actionReadyCheckFragmentToGameGridFragment(
+                lobbyId = lobbyId!!
+            )
+            Log.d("NavController", "Navigating to GameGridFragment with lobbyId: $lobbyId")
+            hasNavigatedToGameGrid = true // Set the flag to true
+            navController.navigate(action)
+        } else {
+            Log.e(
+                "NavController",
+                "Cannot navigate to GameGridFragment: Current destination is $currentDestination"
+            )
+        }
     }
+
+
 
 
     private fun updateUIBasedOnStatus(status: String) {
@@ -111,14 +151,11 @@ class ReadyCheckFragment : Fragment() {
             db.collection("lobbies").document(id)
                 .update("status", "place")
                 .addOnSuccessListener {
-                    Toast.makeText(
-                        requireContext(),
-                        "Session started successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Log.d("ReadyCheckFragment", "Session started. Navigating to GameGridFragment.")
                     navigateToGameGrid()
                 }
                 .addOnFailureListener { e ->
+                    Log.e("ReadyCheckFragment", "Failed to start session: ${e.message}")
                     Toast.makeText(
                         requireContext(),
                         "Failed to start session: ${e.message}",
@@ -127,6 +164,7 @@ class ReadyCheckFragment : Fragment() {
                 }
         }
     }
+
 
     private fun toggleReadyStatus() {
         lobbyId?.let { id ->
